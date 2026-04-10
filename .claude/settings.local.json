@@ -1,0 +1,44 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.hoffmanns-partyservice.de)",
+      "Bash(curl -s -L --max-time 15 \"https://www.hoffmanns-partyservice.de/\" -A \"Mozilla/5.0\")",
+      "Bash(curl -s -L --max-time 15 \"https://www.hoffmanns-partyservice.de/01_Start.html\" -A \"Mozilla/5.0\")",
+      "Bash(curl -s -L --max-time 15 \"https://www.hoffmanns-partyservice.de/02_Partyservice.html\" -A \"Mozilla/5.0\")",
+      "Bash(curl -s -L --max-time 15 \"https://www.hoffmanns-partyservice.de/links.html\" -A \"Mozilla/5.0\")",
+      "Bash(curl -s -L --max-time 15 \"https://www.hoffmanns-partyservice.de/Kopf.html\" -A \"Mozilla/5.0\")",
+      "Bash(bash:*)",
+      "Bash(curl -s \"https://www.hoffmanns-partyservice.de/09_Kontakt_Anfahrt.html\" -A \"Mozilla/5.0\")",
+      "Bash(curl -s \"https://www.hoffmanns-partyservice.de/05_Feiern.html\" -A \"Mozilla/5.0\")",
+      "Bash(curl -s \"https://www.hoffmanns-partyservice.de/041_Menues1.html\" -A \"Mozilla/5.0\")",
+      "Bash(curl -s \"https://www.hoffmanns-partyservice.de/042_Menues2.html\" -A \"Mozilla/5.0\")",
+      "Bash(curl -s \"https://www.hoffmanns-partyservice.de/10_Impressum_AGBs.html\" -A \"Mozilla/5.0\")",
+      "Bash(identify /home/daniel_wsl/GitProjects/PartyService_web/Bilder/001_Kopf/HoffmannsPartyservice_Logo_1.png)",
+      "Bash(wget -q \"https://www.hoffmanns-partyservice.de/Bilder/001_Kopf/HoffmannsPartyservice_Logo_1.png\" -O /home/daniel_wsl/GitProjects/PartyService_web/Bilder/logo.png)",
+      "Bash(wget -q \"https://www.hoffmanns-partyservice.de/Bilder/02_Partyservice/P1040765.jpg\" -O /home/daniel_wsl/GitProjects/PartyService_web/Bilder/hero.jpg)",
+      "Bash(wget -q \"https://www.hoffmanns-partyservice.de/Bilder/02_Partyservice/Party_7-2013/Koch_7_SAM_0035_hoch.jpg\" -O /home/daniel_wsl/GitProjects/PartyService_web/Bilder/about.jpg)",
+      "Bash(python3:*)",
+      "Bash(curl -s \"https://www.hoffmanns-partyservice.de/css/basic.css\" -A \"Mozilla/5.0\")",
+      "Bash(wget -q \"https://www.hoffmanns-partyservice.de/Bilder/03_kueche/GosselmannsHof.jpg\" -O \"gosselmann_hof.jpg\")",
+      "Bash(wget -q \"https://www.hoffmanns-partyservice.de/Bilder/06_Gosselmann/Gosselmann_7-2013/Gosselmann_7_0155.jpg\" -O \"gosselmann_inside.jpg\")",
+      "Bash(curl -s \"https://www.hoffmanns-partyservice.de/06_Gosselmann.html\" -A \"Mozilla/5.0\")",
+      "Bash(py:*)",
+      "Bash(gswin64c --version)",
+      "Bash(gs --version)",
+      "Bash(magick --version)",
+      "Bash(inkscape --version)",
+      "Bash(grep -E \"\\\\.\\(jpg|JPG|png|PNG|jpeg|JPEG\\)$\")",
+      "mcp__plugin_claude-mem_mcp-search__smart_outline",
+      "Bash(ls:*)",
+      "Bash(where python:*)",
+      "Bash(/c/ProgramData/anaconda3/python:*)",
+      "mcp__plugin_claude-mem_mcp-search__get_observations",
+      "Bash(sed -i -e 's|Bilder/logo_hd\\\\.png|Bilder/logos/logo_hd.png|g' -e 's|Bilder/Party/DSC_0041\\\\.JPG|Bilder/menues/suppen/DSC_0041.JPG|g' -e 's|Bilder/Party/DSC_0042\\\\.JPG|Bilder/menues/suppen/DSC_0042.JPG|g' -e 's|Bilder/Party/DSC_0044\\\\.JPG|Bilder/menues/suppen/DSC_0044.JPG|g' -e 's|Bilder/Beilage/DSC_0016\\\\.JPG|Bilder/menues/vegetarisch/DSC_0016.JPG|g' -e 's|Bilder/Beilage/DSC_0017\\\\.JPG|Bilder/menues/vegetarisch/DSC_0017.JPG|g' -e 's|Bilder/Beilage/DSC_0018\\\\.JPG|Bilder/menues/vegetarisch/DSC_0018.JPG|g' -e 's|Bilder/Fleisch/DSC_0002\\\\.JPG|Bilder/menues/fleisch/DSC_0002.JPG|g' -e 's|Bilder/Fleisch/DSC_0021\\\\.JPG|Bilder/menues/fleisch/DSC_0021.JPG|g' -e 's|Bilder/Fleisch/DSC_0022\\\\.JPG|Bilder/menues/fleisch/DSC_0022.JPG|g' -e 's|Bilder/Kalte Küche/DSC_0019\\\\.JPG|Bilder/menues/fisch/DSC_0019.JPG|g' -e 's|Bilder/Kalte Küche/DSC_0020\\\\.JPG|Bilder/menues/fisch/DSC_0020.JPG|g' -e 's|Bilder/Kalte Küche/DSC_0027\\\\.JPG|Bilder/menues/fisch/DSC_0027.JPG|g' -e 's|Bilder/Kalte Küche/DSC_0001\\\\.JPG|Bilder/menues/kaltekueche/DSC_0001.JPG|g' -e 's|Bilder/Kalte Küche/DSC_0014\\\\.JPG|Bilder/menues/kaltekueche/DSC_0014.JPG|g' -e 's|Bilder/Kalte Küche/DSC_0015\\\\.JPG|Bilder/menues/kaltekueche/DSC_0015.JPG|g' -e 's|Bilder/Beilage/DSC_0063\\\\.JPG|Bilder/menues/beilagen/DSC_0063.JPG|g' -e 's|Bilder/Beilage/DSC_0067\\\\.JPG|Bilder/menues/beilagen/DSC_0067.JPG|g' -e 's|Bilder/Beilage/DSC_0084\\\\.JPG|Bilder/menues/beilagen/DSC_0084.JPG|g' -e 's|Bilder/Dessert/DSC_0156\\\\.JPG|Bilder/menues/desserts/DSC_0156.JPG|g' -e 's|Bilder/Dessert/DSC_0158\\\\.JPG|Bilder/menues/desserts/DSC_0158.JPG|g' -e 's|Bilder/Dessert/DSC_0185\\\\.JPG|Bilder/menues/desserts/DSC_0185.JPG|g' menues.html)",
+      "Bash(sed -i 's|Bilder/logo_hd\\\\.png|Bilder/logos/logo_hd.png|g' impressum.html)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "claude-flow"
+  ]
+}
