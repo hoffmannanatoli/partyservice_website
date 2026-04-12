@@ -1,2 +1,19 @@
 # Photos — not committed yet
 Bilder/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+*.log
+
+# VS Code
+.vscode/
