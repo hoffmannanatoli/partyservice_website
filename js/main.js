@@ -209,6 +209,44 @@
     }
   }
 
+  /* ── 7. Photo carousels ───────────────────────────────────── */
+  document.querySelectorAll('.section-photos').forEach(strip => {
+    const carousel = document.createElement('div');
+    carousel.className = 'photo-carousel';
+    strip.parentNode.insertBefore(carousel, strip);
+    carousel.appendChild(strip);
+
+    const prev = document.createElement('button');
+    prev.className = 'carousel-btn carousel-prev';
+    prev.setAttribute('aria-label', 'Vorheriges Foto');
+    prev.innerHTML = '&#8249;';
+
+    const next = document.createElement('button');
+    next.className = 'carousel-btn carousel-next';
+    next.setAttribute('aria-label', 'Nächstes Foto');
+    next.innerHTML = '&#8250;';
+
+    carousel.insertBefore(prev, strip);
+    carousel.appendChild(next);
+
+    prev.addEventListener('click', () => {
+      const photoW = strip.querySelector('.section-photo')?.offsetWidth + 4 || 200;
+      if (strip.scrollLeft <= 2) {
+        strip.scrollTo({ left: strip.scrollWidth, behavior: 'smooth' });
+      } else {
+        strip.scrollBy({ left: -photoW, behavior: 'smooth' });
+      }
+    });
+    next.addEventListener('click', () => {
+      const photoW = strip.querySelector('.section-photo')?.offsetWidth + 4 || 200;
+      if (strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 2) {
+        strip.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        strip.scrollBy({ left: photoW, behavior: 'smooth' });
+      }
+    });
+  });
+
   /* ── 6. Scroll reveal ─────────────────────────────────────── */
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(

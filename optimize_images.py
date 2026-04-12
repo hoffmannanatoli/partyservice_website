@@ -6,9 +6,11 @@ Converts photos to WebP, resizes per section, removes exact duplicates.
 Output mirrors the input folder structure inside an '<folder>_web' directory.
 
 Usage:
-    python optimize_images.py <folder_path>
-    python optimize_images.py <folder_path> --dry-run
-    python optimize_images.py <folder_path> --output path/to/output
+    python optimize_images.py <folder_path>            — process whole folder
+    python optimize_images.py <file_path>              — process single file
+    python optimize_images.py <path> --dry-run
+    python optimize_images.py <path> --output path/to/output
+    python optimize_images.py <path> --preset hero     — override preset
 
 Section presets (detected from subfolder names):
     hero/         1920×1080  q82  — full-width background slides
@@ -102,16 +104,57 @@ def optimize(src: Path, dst: Path, preset: tuple, dry_run: bool) -> str:
 
 def main():
     parser = argparse.ArgumentParser(description="Optimize images for web.")
-    parser.add_argument("folder", help="Input folder to process")
-    parser.add_argument("--output", help="Output folder (default: <folder>_web)")
+    parser.add_argument("path", help="Input file or folder to process")
+    parser.add_argument("--output", help="Output file or folder (default: auto)")
     parser.add_argument("--dry-run", action="store_true", help="Show what would happen without doing it")
+    parser.add_argument("--preset", choices=list(PRESETS.keys()), help="Force a specific preset (overrides folder detection)")
     args = parser.parse_args()
 
-    src_root = Path(args.folder).resolve()
+    src_path = Path(args.path).resolve()
+
+    # ── Single file mode ──────────────────────────────────────────────────
+    if src_path.is_file():
+        if src_path.suffix.lower() not in SUPPORTED_EXT:
+            sys.exit(f"Error: unsupported file type '{src_path.suffix}'")
+
+        # Determine preset
+        if args.preset:
+            preset = PRESETS[args.preset]
+        else:
+            preset = get_preset(src_path.relative_to(src_path.parent))
+            # Try to detect from parent folder name
+            parent_name = src_path.parent.name.lower()
+            if parent_name in PRESETS:
+                preset = PRESETS[parent_name]
+
+        # Determine output path
+        if args.output:
+            dst = Path(args.output).resolve()
+        else:
+            out_dir = src_path.parent.parent / (src_path.parent.name + "_web")
+            dst = out_dir / src_path.name
+
+        print(f"\nFile   : {src_path}")
+        print(f"Output : {dst}")
+        print(f"Preset : {preset}")
+        print(f"Mode   : {'DRY RUN' if args.dry_run else 'LIVE'}\n")
+
+        try:
+            status = optimize(src_path, dst, preset, args.dry_run)
+            print(f"  {src_path.name}  {status}")
+        except Exception as e:
+            sys.exit(f"ERROR: {e}")
+        return
+
+    # ── Folder mode ───────────────────────────────────────────────────────
+    src_root = src_path
     if not src_root.is_dir():
-        sys.exit(f"Error: '{src_root}' is not a directory.")
+        sys.exit(f"Error: '{src_root}' is not a file or directory.")
 
     dst_root = Path(args.output).resolve() if args.output else src_root.parent / (src_root.name + "_web")
+
+    if args.preset:
+        print(f"Note: --preset is ignored in folder mode (detected per subfolder).")
 
     print(f"\nSource : {src_root}")
     print(f"Output : {dst_root}")
@@ -128,19 +171,22 @@ def main():
     if not all_files:
         sys.exit("No supported image files found.")
 
-    # ── Duplicate detection (MD5) ─────────────────────────────────────────
+    # ── Duplicate detection (MD5, scoped per folder) ──────────────────────
     print("Scanning for duplicates...")
-    seen_hashes: dict[str, Path] = {}
+    seen_hashes: dict[Path, dict[str, Path]] = {}  # folder → {hash: first_file}
     duplicates: list[Path] = []
 
     for f in all_files:
+        folder = f.parent
+        if folder not in seen_hashes:
+            seen_hashes[folder] = {}
         h = file_hash(f)
-        if h in seen_hashes:
+        if h in seen_hashes[folder]:
             duplicates.append(f)
             print(f"  DUPLICATE: {f.relative_to(src_root)}")
-            print(f"    (same as {seen_hashes[h].relative_to(src_root)})")
+            print(f"    (same as {seen_hashes[folder][h].relative_to(src_root)})")
         else:
-            seen_hashes[h] = f
+            seen_hashes[folder][h] = f
 
     if duplicates:
         if not args.dry_run:
