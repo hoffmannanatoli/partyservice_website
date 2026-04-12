@@ -247,6 +247,61 @@
     });
   });
 
+  /* ── 8. Gallery marquee navigation ───────────────────────────── */
+  document.querySelectorAll('.gallery-row').forEach(row => {
+    const track = row.querySelector('.gallery-track');
+    if (!track) return;
+
+    // Create navigation buttons
+    const prev = document.createElement('button');
+    prev.className = 'gallery-nav-btn gallery-nav-prev';
+    prev.setAttribute('aria-label', 'Vorherige Fotos');
+    prev.innerHTML = '&#8249;';
+
+    const next = document.createElement('button');
+    next.className = 'gallery-nav-btn gallery-nav-next';
+    next.setAttribute('aria-label', 'Nächste Fotos');
+    next.innerHTML = '&#8250;';
+
+    row.appendChild(prev);
+    row.appendChild(next);
+
+    // Get animation direction
+    const isLeftScrolling = row.classList.contains('gallery-row--left');
+    const itemWidth = 260; // CSS width + gap
+    const scrollAmount = itemWidth * 2; // Scroll 2 images at a time
+
+    const scrollGallery = (direction) => {
+      // Pause animation
+      track.style.animationPlayState = 'paused';
+
+      // Calculate current position
+      const currentTransform = track.style.transform || '';
+      const match = currentTransform.match(/translateX\(([-\d.]+)px\)/);
+      let currentX = match ? parseFloat(match[1]) : 0;
+
+      // Apply scroll
+      currentX += direction * scrollAmount;
+      track.style.transform = `translateX(${currentX}px)`;
+
+      // Resume animation after brief pause
+      setTimeout(() => {
+        track.style.animationPlayState = 'running';
+        track.style.transform = '';
+      }, 3000);
+    };
+
+    prev.addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollGallery(isLeftScrolling ? 1 : -1);
+    });
+
+    next.addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollGallery(isLeftScrolling ? -1 : 1);
+    });
+  });
+
   /* ── 6. Scroll reveal ─────────────────────────────────────── */
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
