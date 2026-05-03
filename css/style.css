@@ -455,10 +455,10 @@ a:hover { text-decoration: underline; }
 }
 
 .gallery-row--left .gallery-track {
-  animation: marquee-left 40s linear infinite;
+  animation: marquee-left 80s linear infinite;
 }
 .gallery-row--right .gallery-track {
-  animation: marquee-right 40s linear infinite;
+  animation: marquee-right 80s linear infinite;
 }
 
 @keyframes marquee-left {

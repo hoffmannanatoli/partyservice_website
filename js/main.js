@@ -272,23 +272,20 @@
     const scrollAmount = itemWidth * 2; // Scroll 2 images at a time
 
     const scrollGallery = (direction) => {
-      // Pause animation
-      track.style.animationPlayState = 'paused';
+      const anim = track.getAnimations()[0];
+      if (!anim) return;
 
-      // Calculate current position
-      const currentTransform = track.style.transform || '';
-      const match = currentTransform.match(/translateX\(([-\d.]+)px\)/);
-      let currentX = match ? parseFloat(match[1]) : 0;
+      anim.pause();
 
-      // Apply scroll
-      currentX += direction * scrollAmount;
-      track.style.transform = `translateX(${currentX}px)`;
+      const duration = anim.effect.getTiming().duration;
+      const halfWidth = track.scrollWidth / 2;
+      const deltaTime = (scrollAmount / halfWidth) * duration;
 
-      // Resume animation after brief pause
-      setTimeout(() => {
-        track.style.animationPlayState = 'running';
-        track.style.transform = '';
-      }, 3000);
+      let newTime = (anim.currentTime || 0) + direction * deltaTime;
+      newTime = ((newTime % duration) + duration) % duration;
+      anim.currentTime = newTime;
+
+      setTimeout(() => anim.play(), 2500);
     };
 
     prev.addEventListener('click', (e) => {
@@ -299,6 +296,15 @@
     next.addEventListener('click', (e) => {
       e.preventDefault();
       scrollGallery(isLeftScrolling ? -1 : 1);
+    });
+
+    row.addEventListener('mouseenter', () => {
+      const anim = track.getAnimations()[0];
+      if (anim) anim.pause();
+    });
+    row.addEventListener('mouseleave', () => {
+      const anim = track.getAnimations()[0];
+      if (anim) anim.play();
     });
   });
 
